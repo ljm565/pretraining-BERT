@@ -38,8 +38,6 @@ class Trainer:
         self.batch_size = self.config.batch_size
         self.epochs = self.config.epochs
         self.lr = self.config.lr
-        self.max_len = self.config.max_len
-        self.result_num = self.config.result_num
 
         # define tokenizer
         self.tokenizer = Tokenizer(self.config)

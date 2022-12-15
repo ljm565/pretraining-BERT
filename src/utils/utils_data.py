@@ -9,6 +9,7 @@ class DLoader(Dataset):
         self.data = data
         self.tokenizer = tokenizer
         self.max_len = config.max_len
+        self.len_per_s = self.max_len // 2
 
         self.pad_token_id = self.tokenizer.pad_token_id
         self.cls_token_id = self.tokenizer.cls_token_id
@@ -30,7 +31,7 @@ class DLoader(Dataset):
     
     def random_mlm(self, s1, s2):
         # s1 and s2 are sliced from back and front, respectively.
-        s1, s2 = [self.cls_token_id] + self.tokenizer.encode(s1)[-self.max_len+2:] + [self.sep_token_id], self.tokenizer.encode(s2)[:self.max_len-1] + [self.sep_token_id]
+        s1, s2 = [self.cls_token_id] + self.tokenizer.encode(s1)[-self.len_per_s+2:] + [self.sep_token_id], self.tokenizer.encode(s2)[:self.len_per_s-1] + [self.sep_token_id]
         
         # make segments ids
         segment = [1] * len(s1) + [2] * len(s2)
@@ -70,7 +71,7 @@ class DLoader(Dataset):
         assert len(mlm_label) == len(total_s) == len(segment) == s_len
 
         # padding
-        pad_len = self.max_len * 2 - s_len
+        pad_len = self.max_len - s_len
         total_s = total_s + [self.pad_token_id] * pad_len
         mlm_label = mlm_label + [self.pad_token_id] * pad_len
         segment = segment + [self.pad_token_id] * pad_len

@@ -28,8 +28,8 @@ class PositionalEmbedding(nn.Module):
         self.hidden_dim = hidden_dim
         self.device = device
 
-        self.pos = torch.arange(0, self.max_len * 2)
-        self.emb_layer = nn.Embedding(self.max_len * 2, self.hidden_dim)
+        self.pos = torch.arange(0, self.max_len)
+        self.emb_layer = nn.Embedding(self.max_len, self.hidden_dim)
 
 
     def forward(self, x):
