@@ -6,8 +6,6 @@ from torch.utils.data import DataLoader
 import pickle
 from tokenizer import Tokenizer
 import time
-import random
-from tqdm import tqdm
 
 from utils.config import Config
 from utils.utils_func import *
