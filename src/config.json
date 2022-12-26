@@ -1,7 +1,7 @@
 {   
     "base_path": "./",
-    "model_name": "test",
-    "loss_data_name": "test",
+    "model_name": "bert",
+    "loss_data_name": "bert",
 
 
     "vocab_size": 30000,
