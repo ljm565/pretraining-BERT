@@ -60,7 +60,7 @@ class Trainer:
             total_steps = int(len(self.dataloaders['train'].dataset) / self.batch_size * self.epochs) + 1
             pct_start = 10000 / total_steps
             final_div_factor = self.lr / 25 / 2.5e-6
-            self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.9, 0.999), weight_decay=0.01)
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.9, 0.999))
             self.scheduler = OneCycleLR(self.optimizer, max_lr=self.lr, total_steps=total_steps, pct_start=pct_start, final_div_factor=final_div_factor)
             if self.continuous:
                 self.check_point = torch.load(self.model_path, map_location=self.device)
