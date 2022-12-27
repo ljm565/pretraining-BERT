@@ -58,8 +58,8 @@ class Trainer:
     
         if self.mode == 'train':
             total_steps = int(len(self.dataloaders['train'].dataset) / self.batch_size * self.epochs) + 1
-            pct_start = 10000 / total_steps
-            final_div_factor = self.lr / 25 / 2.5e-6
+            pct_start = 20000 / total_steps
+            final_div_factor = self.lr / 25 / 1e-6
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.9, 0.999))
             self.scheduler = OneCycleLR(self.optimizer, max_lr=self.lr, total_steps=total_steps, pct_start=pct_start, final_div_factor=final_div_factor)
             if self.continuous:
@@ -120,7 +120,7 @@ class Trainer:
                     total_mlm_loss += mlm_loss.item() * batch_size
                     total_nsp_acc += nsp_acc * batch_size
 
-                    if i % 100 == 0:
+                    if i % 1000 == 0:
                         print('Epoch {}: {}/{} step loss: {} (nsp: {}, mlm: {}), nsp acc: {}'.format(epoch+1, i, len(self.dataloaders[phase]), loss.item(), nsp_loss.item(), mlm_loss.item(), nsp_acc))
                 
                 dataset_len = len(self.dataloaders[phase].dataset)
@@ -162,3 +162,29 @@ class Trainer:
         print('best val loss: {:4f}, best epoch: {:d}\n'.format(best_val_loss, best_epoch))
 
         return self.loss_data
+
+
+    def test(self, phase):
+        with torch.no_grad():
+            self.model.eval()
+            total_loss, total_nsp_loss, total_mlm_loss, total_nsp_acc = 0, 0, 0, 0
+            for x, segment, nsp_label, mlm_label in self.dataloaders[phase]:
+                batch_size = x.size(0)
+                x, segment, nsp_label, mlm_label = x.to(self.device), segment.to(self.device), nsp_label.to(self.device), mlm_label.to(self.device)
+                _, (nsp_output, mlm_output) = self.model(x, segment)
+                nsp_loss = self.nsp_criterion(nsp_output, nsp_label)
+                mlm_loss = self.mlm_criterion(mlm_output.reshape(-1, mlm_output.size(-1)), mlm_label.reshape(-1))
+                loss = nsp_loss + mlm_loss
+                nsp_acc = torch.sum(torch.argmax(nsp_output, dim=-1).detach().cpu() == nsp_label.detach().cpu()) / batch_size
+
+                total_loss += loss.item() * batch_size
+                total_nsp_loss += nsp_loss.item() * batch_size
+                total_mlm_loss += mlm_loss.item() * batch_size
+                total_nsp_acc += nsp_acc * batch_size
+
+        dataset_len = len(self.dataloaders[phase].dataset)
+        epoch_loss = total_loss / dataset_len
+        epoch_nsp_loss = total_nsp_loss / dataset_len
+        epoch_mlm_loss = total_mlm_loss / dataset_len
+        epoch_nsp_acc = total_nsp_acc / dataset_len
+        print('{} loss: {:4f} (nsp: {}, mlm: {}), nsp acc: {}\n'.format(phase, epoch_loss, epoch_nsp_loss, epoch_mlm_loss, epoch_nsp_acc))

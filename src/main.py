@@ -68,6 +68,9 @@ def main(config_path:Config, args:ArgumentParser):
         print('Saving the loss related data...')
         with open(loss_data_path, 'wb') as f:
             pickle.dump(loss_data, f)
+    
+    elif args.mode == 'test':
+        trainer.test('test')
 
     else:
         print("Please select mode between 'train', and 'test'..")
