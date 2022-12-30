@@ -57,7 +57,7 @@ class Trainer:
         self.mlm_criterion = nn.CrossEntropyLoss(ignore_index=self.tokenizer.pad_token_id)
     
         if self.mode == 'train':
-            total_steps = int(len(self.dataloaders['train'].dataset) / self.batch_size * self.epochs) + 1
+            total_steps = (int(len(self.dataloaders['train'].dataset) / self.batch_size) + 1) * self.epochs
             pct_start = 20000 / total_steps
             final_div_factor = self.lr / 25 / 1e-6
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.9, 0.999))
