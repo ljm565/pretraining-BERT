@@ -83,10 +83,17 @@ mv data_sample data
 
 
 ## 결과
-* ### 학습 데이터별 결과
-    아래 결과는 validation set의 가장 낮은 loss를 달성했을 때 모델의 test set 결과입니다.
+* ### 학습 결과
+    * Loss History<br>
+    <img src="images/loss.png" width="80%"><br><br>
+
+    * Accuracy History<br>
+    <img src="images/acc.png" width="80%"><br><br>
     
-    * NSP Accuracy: 0.9064
-    * MLM Loss: 3.3678
+    아래 결과는 validation set의 가장 낮은 loss를 달성했을 때 모델의 test set 결과입니다.
+    학습 시간이 오래 걸리다보니 20 epoch만을 실험하였지만, 계속해서 loss가 낮아지고 있었습니다.
+
+    * NSP Accuracy: 0.9518
+    * MLM Loss: 2.6205
 
 <br><br><br>
