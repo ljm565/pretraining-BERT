@@ -6,7 +6,6 @@ from torch.utils.data import DataLoader
 import pickle
 from tokenizer import Tokenizer
 import time
-from math import ceil
 
 from utils.config import Config
 from utils.utils_func import *
@@ -58,7 +57,7 @@ class Trainer:
         self.mlm_criterion = nn.CrossEntropyLoss(ignore_index=self.tokenizer.pad_token_id)
     
         if self.mode == 'train':
-            total_steps = ceil(len(self.dataloaders['train'].dataset) / self.batch_size) * self.epochs
+            total_steps = len(self.dataloaders['train']) * self.epochs
             pct_start = 20000 / total_steps
             final_div_factor = self.lr / 25 / 1e-6
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, betas=(0.9, 0.999))
