@@ -32,7 +32,7 @@ def save_data(base_path):
                 pickle.dump(dataset, f)
 
         with open(base_path+'data/wiki-split/raw/data.all', 'w') as f:
-                f.writelines(all_s)
+            f.writelines(all_s)
                 
 
 def make_dataset_path(base_path):
