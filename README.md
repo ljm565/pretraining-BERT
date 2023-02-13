@@ -14,7 +14,7 @@ BERT pre-training에 대한 설명은 [WikiSplit을 이용한 BERT Pre-training]
 ## 토크나이저 종류
 * ### Wordpiece Tokenizer
     Likelihood 기반으로 BPE를 수행한 subword 토크나이저를 사용합니다.
-    학습을 한 번 실행 시킨 후, 토크나이저가 없다는 메시지를 뱉을 시 wordpiece 토크나이저의 vocab 파일을 모델 학습 전에 아래 명령어를 이용하여 먼저 제작해야합니다. 제작할 vocab의 크기는 src/tokenizer/make_vocab.sh에서 수정할 수 있습니다(Defaut: 30,000).
+    학습을 한 번 실행 시킨 후, 토크나이저가 없다는 메시지를 뱉을 시 wordpiece 토크나이저의 vocab 파일을 모델 학습 전에 아래 명령어를 이용하여 먼저 제작해야합니다. 제작할 vocab의 크기는 src/tokenizer/make_vocab.sh에서 수정할 수 있습니다(Default: 30,000).
     
     ```
     cd src/tokenizer
